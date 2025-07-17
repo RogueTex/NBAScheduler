@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/NBAScheduler/static/css/main.e6c13ad2.css",
+    "main.js": "/NBAScheduler/static/js/main.3e9e173f.js",
+    "static/js/453.670e15c7.chunk.js": "/NBAScheduler/static/js/453.670e15c7.chunk.js",
+    "index.html": "/NBAScheduler/index.html",
+    "main.e6c13ad2.css.map": "/NBAScheduler/static/css/main.e6c13ad2.css.map",
+    "main.3e9e173f.js.map": "/NBAScheduler/static/js/main.3e9e173f.js.map",
+    "453.670e15c7.chunk.js.map": "/NBAScheduler/static/js/453.670e15c7.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e6c13ad2.css",
+    "static/js/main.3e9e173f.js"
+  ]
+}
