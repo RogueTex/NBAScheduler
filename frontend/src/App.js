@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import TeamSelector from './components/TeamSelector';
 import Bracket from './components/Bracket';
 import ScheduleView from './components/ScheduleView';
+
+const API_URL = process.env.REACT_APP_API_URL;
 
 const App = () => {
   const [eastTeams, setEastTeams] = useState([]);
@@ -10,9 +12,28 @@ const App = () => {
   const [schedule, setSchedule] = useState(null);
   const [allTeams, setAllTeams] = useState([]);
 
-  // TODO: Fetch allTeams from backend on mount
+  useEffect(() => {
+    fetch(`${API_URL}/teams`)
+      .then(res => res.json())
+      .then(data => setAllTeams(data.teams));
+  }, []);
 
-  // TODO: Handle team selection and API call to generate schedule
+  const handleGenerateSchedule = () => {
+    fetch(`${API_URL}/schedule`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        east_teams: eastTeams,
+        west_teams: westTeams,
+        min_days_between_games: 1
+      })
+    })
+      .then(res => res.json())
+      .then(data => {
+        setBracket(data.bracket);
+        setSchedule(data.schedule);
+      });
+  };
 
   return (
     <div>
@@ -31,7 +52,9 @@ const App = () => {
           conference="West"
         />
       </div>
-      <button /* onClick={handleGenerateSchedule} */>Generate Schedule</button>
+      <button onClick={handleGenerateSchedule} disabled={eastTeams.length !== 8 || westTeams.length !== 8}>
+        Generate Schedule
+      </button>
       {bracket && <Bracket bracket={bracket} />}
       {schedule && <ScheduleView schedule={schedule} />}
     </div>
