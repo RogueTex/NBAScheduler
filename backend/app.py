@@ -1,6 +1,7 @@
-from fastapi import FastAPI, Query
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from typing import List
+from pydantic import BaseModel
 from scraper import get_venue_events
 from scheduler import generate_playoff_schedule
 
@@ -57,12 +58,16 @@ def get_events(venue: str):
     events = get_venue_events(venue)
     return {"events": events}
 
+class ScheduleRequest(BaseModel):
+    east_teams: list[str]
+    west_teams: list[str]
+    min_days_between_games: int = 1
+
 @app.post("/schedule")
-def generate_schedule(
-    east_teams: List[str] = Query(...),
-    west_teams: List[str] = Query(...),
-    min_days_between_games: int = Query(1)
-):
+def generate_schedule(req: ScheduleRequest):
+    east_teams = req.east_teams
+    west_teams = req.west_teams
+    min_days_between_games = req.min_days_between_games
     # Gather all venues for selected teams
     selected_teams = [t for t in NBA_TEAMS if t["name"] in east_teams + west_teams]
     venues = {t["venue"] for t in selected_teams}
