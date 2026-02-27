@@ -1,0 +1,81 @@
+round,series,home,away,game_num,date,venue,conflict_score
+First Round,r1_0,Detroit Pistons,Philadelphia 76ers,1,2026-04-19,Little Caesars Arena,0.0
+First Round,r1_0,Detroit Pistons,Philadelphia 76ers,2,2026-04-21,Little Caesars Arena,0.0
+First Round,r1_0,Detroit Pistons,Philadelphia 76ers,3,2026-04-24,Xfinity Mobile Arena,0.0
+First Round,r1_0,Detroit Pistons,Philadelphia 76ers,4,2026-04-26,Xfinity Mobile Arena,0.0
+First Round,r1_1,Cleveland Cavaliers,Charlotte Hornets,1,2026-04-19,Rocket Arena,0.0
+First Round,r1_1,Cleveland Cavaliers,Charlotte Hornets,2,2026-04-21,Rocket Arena,0.0
+First Round,r1_1,Cleveland Cavaliers,Charlotte Hornets,3,2026-04-24,Spectrum Center,0.0
+First Round,r1_1,Cleveland Cavaliers,Charlotte Hornets,4,2026-04-26,Spectrum Center,0.0
+First Round,r1_1,Cleveland Cavaliers,Charlotte Hornets,5,2026-04-29,Rocket Arena,0.0
+First Round,r1_2,New York Knicks,Miami Heat,1,2026-04-19,Madison Square Garden,0.0
+First Round,r1_2,New York Knicks,Miami Heat,2,2026-04-21,Madison Square Garden,0.0
+First Round,r1_2,New York Knicks,Miami Heat,3,2026-04-24,Kaseya Center,0.0
+First Round,r1_2,New York Knicks,Miami Heat,4,2026-04-26,Kaseya Center,0.0
+First Round,r1_2,New York Knicks,Miami Heat,5,2026-04-29,Madison Square Garden,0.0
+First Round,r1_2,New York Knicks,Miami Heat,6,2026-05-03,Kaseya Center,0.0
+First Round,r1_2,New York Knicks,Miami Heat,7,2026-05-06,Madison Square Garden,0.0
+First Round,r1_3,Boston Celtics,Toronto Raptors,1,2026-04-20,TD Garden,0.0
+First Round,r1_3,Boston Celtics,Toronto Raptors,2,2026-04-23,TD Garden,0.0
+First Round,r1_3,Boston Celtics,Toronto Raptors,3,2026-04-26,Scotiabank Arena,0.0
+First Round,r1_3,Boston Celtics,Toronto Raptors,4,2026-04-29,Scotiabank Arena,0.0
+First Round,r1_3,Boston Celtics,Toronto Raptors,5,2026-05-02,TD Garden,0.0
+First Round,r1_4,Oklahoma City Thunder,Los Angeles Clippers,1,2026-04-19,Paycom Center,0.0
+First Round,r1_4,Oklahoma City Thunder,Los Angeles Clippers,2,2026-04-21,Paycom Center,0.0
+First Round,r1_4,Oklahoma City Thunder,Los Angeles Clippers,3,2026-04-24,Intuit Dome,0.0
+First Round,r1_4,Oklahoma City Thunder,Los Angeles Clippers,4,2026-04-26,Intuit Dome,0.0
+First Round,r1_4,Oklahoma City Thunder,Los Angeles Clippers,5,2026-04-29,Paycom Center,0.0
+First Round,r1_5,Denver Nuggets,Minnesota Timberwolves,1,2026-04-19,Ball Arena,0.0
+First Round,r1_5,Denver Nuggets,Minnesota Timberwolves,2,2026-04-21,Ball Arena,0.0
+First Round,r1_5,Denver Nuggets,Minnesota Timberwolves,3,2026-04-24,Target Center,0.0
+First Round,r1_5,Denver Nuggets,Minnesota Timberwolves,4,2026-04-26,Target Center,0.0
+First Round,r1_5,Denver Nuggets,Minnesota Timberwolves,5,2026-04-29,Ball Arena,0.0
+First Round,r1_6,Houston Rockets,Golden State Warriors,1,2026-04-19,Toyota Center,0.0
+First Round,r1_6,Houston Rockets,Golden State Warriors,2,2026-04-21,Toyota Center,0.0
+First Round,r1_6,Houston Rockets,Golden State Warriors,3,2026-04-24,Chase Center,0.0
+First Round,r1_6,Houston Rockets,Golden State Warriors,4,2026-04-26,Chase Center,0.0
+First Round,r1_7,San Antonio Spurs,Phoenix Suns,1,2026-04-19,Frost Bank Center,0.0
+First Round,r1_7,San Antonio Spurs,Phoenix Suns,2,2026-04-21,Frost Bank Center,0.0
+First Round,r1_7,San Antonio Spurs,Phoenix Suns,3,2026-04-24,Mortgage Matchup Center,0.0
+First Round,r1_7,San Antonio Spurs,Phoenix Suns,4,2026-04-26,Mortgage Matchup Center,0.0
+First Round,r1_7,San Antonio Spurs,Phoenix Suns,5,2026-04-29,Frost Bank Center,0.0
+Conf Semis,r2_0,Detroit Pistons,Cleveland Cavaliers,1,2026-05-10,Little Caesars Arena,0.0
+Conf Semis,r2_0,Detroit Pistons,Cleveland Cavaliers,2,2026-05-12,Little Caesars Arena,0.0
+Conf Semis,r2_0,Detroit Pistons,Cleveland Cavaliers,3,2026-05-15,Rocket Arena,0.0
+Conf Semis,r2_0,Detroit Pistons,Cleveland Cavaliers,4,2026-05-17,Rocket Arena,0.0
+Conf Semis,r2_0,Detroit Pistons,Cleveland Cavaliers,5,2026-05-20,Little Caesars Arena,0.0
+Conf Semis,r2_0,Detroit Pistons,Cleveland Cavaliers,6,2026-05-23,Rocket Arena,0.0
+Conf Semis,r2_0,Detroit Pistons,Cleveland Cavaliers,7,2026-05-26,Little Caesars Arena,0.0
+Conf Semis,r2_1,New York Knicks,Boston Celtics,1,2026-05-09,Madison Square Garden,0.0
+Conf Semis,r2_1,New York Knicks,Boston Celtics,2,2026-05-11,Madison Square Garden,0.0
+Conf Semis,r2_1,New York Knicks,Boston Celtics,3,2026-05-14,TD Garden,0.0
+Conf Semis,r2_1,New York Knicks,Boston Celtics,4,2026-05-16,TD Garden,0.0
+Conf Semis,r2_1,New York Knicks,Boston Celtics,5,2026-05-19,Madison Square Garden,0.0
+Conf Semis,r2_1,New York Knicks,Boston Celtics,6,2026-05-22,TD Garden,0.0
+Conf Semis,r2_1,New York Knicks,Boston Celtics,7,2026-05-25,Madison Square Garden,0.0
+Conf Semis,r2_2,Oklahoma City Thunder,Denver Nuggets,1,2026-05-09,Paycom Center,0.0
+Conf Semis,r2_2,Oklahoma City Thunder,Denver Nuggets,2,2026-05-11,Paycom Center,0.0
+Conf Semis,r2_2,Oklahoma City Thunder,Denver Nuggets,3,2026-05-14,Ball Arena,0.0
+Conf Semis,r2_2,Oklahoma City Thunder,Denver Nuggets,4,2026-05-16,Ball Arena,0.0
+Conf Semis,r2_3,Houston Rockets,San Antonio Spurs,1,2026-05-09,Toyota Center,0.0
+Conf Semis,r2_3,Houston Rockets,San Antonio Spurs,2,2026-05-11,Toyota Center,0.0
+Conf Semis,r2_3,Houston Rockets,San Antonio Spurs,3,2026-05-14,Frost Bank Center,0.0
+Conf Semis,r2_3,Houston Rockets,San Antonio Spurs,4,2026-05-16,Frost Bank Center,0.0
+Conf Semis,r2_3,Houston Rockets,San Antonio Spurs,5,2026-05-19,Toyota Center,0.0
+Conf Semis,r2_3,Houston Rockets,San Antonio Spurs,6,2026-05-22,Frost Bank Center,0.0
+Conf Finals,r3_0,Detroit Pistons,New York Knicks,1,2026-05-29,Little Caesars Arena,0.0
+Conf Finals,r3_0,Detroit Pistons,New York Knicks,2,2026-06-01,Little Caesars Arena,0.0
+Conf Finals,r3_0,Detroit Pistons,New York Knicks,3,2026-06-04,Madison Square Garden,0.0
+Conf Finals,r3_0,Detroit Pistons,New York Knicks,4,2026-06-06,Madison Square Garden,0.0
+Conf Finals,r3_0,Detroit Pistons,New York Knicks,5,2026-06-09,Little Caesars Arena,0.0
+Conf Finals,r3_1,Oklahoma City Thunder,San Antonio Spurs,1,2026-05-29,Paycom Center,0.0
+Conf Finals,r3_1,Oklahoma City Thunder,San Antonio Spurs,2,2026-05-31,Paycom Center,0.0
+Conf Finals,r3_1,Oklahoma City Thunder,San Antonio Spurs,3,2026-06-03,Frost Bank Center,0.0
+Conf Finals,r3_1,Oklahoma City Thunder,San Antonio Spurs,4,2026-06-05,Frost Bank Center,0.0
+Conf Finals,r3_1,Oklahoma City Thunder,San Antonio Spurs,5,2026-06-08,Paycom Center,0.0
+NBA Finals,r4_0,Detroit Pistons,Oklahoma City Thunder,1,2026-06-03,Little Caesars Arena,0.0
+NBA Finals,r4_0,Detroit Pistons,Oklahoma City Thunder,2,2026-06-05,Little Caesars Arena,0.0
+NBA Finals,r4_0,Detroit Pistons,Oklahoma City Thunder,3,2026-06-08,Paycom Center,0.0
+NBA Finals,r4_0,Detroit Pistons,Oklahoma City Thunder,4,2026-06-10,Paycom Center,0.0
+NBA Finals,r4_0,Detroit Pistons,Oklahoma City Thunder,5,2026-06-13,Little Caesars Arena,0.0
+NBA Finals,r4_0,Detroit Pistons,Oklahoma City Thunder,6,2026-06-16,Paycom Center,0.0
