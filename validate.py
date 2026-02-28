@@ -1,142 +1,161 @@
 """
-Validation: compare Ticketmaster API results against 5-venue scraper results.
-For each of the 5 scraped venues, check:
-  - Coverage: what % of scraper events appear in the API data?
-  - API extras: events the API has that the scrapers missed
-  - Scraper extras: events the scrapers have that the API missed
+Validation: compare Ticketmaster API results against venue scraper results.
+For each scraped venue, check coverage and unmatched events.
 Output: validation_report.txt + validation_detail.csv
 """
 
+import argparse
 import unicodedata
-import pandas as pd
 from datetime import timedelta
 
-# ── Load data ──────────────────────────────────────────────────────────────────
-api_df  = pd.read_csv("nba_playoff_events_2026.csv", parse_dates=["date"])
-scr_df  = pd.read_csv("nba_playoff_scraped_2026.csv",  parse_dates=["Date"])
+import pandas as pd
 
-# Normalize scrapers df column names to match API
-scr_df = scr_df.rename(columns={"Title": "name", "Date": "date", "Time": "time", "Venue": "venue"})
 
-# Map scraper venue names to the canonical team → normalize both to lowercase stripped
-SCRAPER_VENUES = [
-    "State Farm Arena",
-    "TD Garden",
-    "Barclays Center",
-    "Spectrum Center",
-    # United Center skipped (Cloudflare blocked)
-]
+def parse_args():
+    parser = argparse.ArgumentParser(description="Validate Ticketmaster API data against scraper data")
+    parser.add_argument(
+        "--api-csv",
+        default="nba_playoff_events_2026.csv",
+        help="API events CSV path",
+    )
+    parser.add_argument(
+        "--scraper-csv",
+        default="nba_playoff_scraped_2026.csv",
+        help="Scraper events CSV path",
+    )
+    parser.add_argument("--report-out", default="validation_report.txt", help="Text report output path")
+    parser.add_argument("--detail-out", default="validation_detail.csv", help="Detailed CSV output path")
+    return parser.parse_args()
 
-def normalize(s):
+
+def normalize(value):
     """Lowercase, strip whitespace, and remove diacritics (e.g. 'í' -> 'i')."""
-    s = str(s).lower().strip()
+    normalized = str(value).lower().strip()
     return "".join(
-        c for c in unicodedata.normalize("NFKD", s)
-        if not unicodedata.combining(c)
+        character for character in unicodedata.normalize("NFKD", normalized) if not unicodedata.combining(character)
     )
 
-lines = []
-detail_rows = []
 
-lines.append("=" * 70)
-lines.append("VALIDATION REPORT: Ticketmaster API vs. Venue Scrapers")
-lines.append(f"API events total:     {len(api_df)}")
-lines.append(f"Scraper events total: {len(scr_df)} (4 venues)")
-lines.append("=" * 70)
+def main():
+    args = parse_args()
 
-for venue_name in SCRAPER_VENUES:
-    lines.append(f"\n{'─'*60}")
-    lines.append(f"Venue: {venue_name}")
-    lines.append(f"{'─'*60}")
+    api_df = pd.read_csv(args.api_csv, parse_dates=["date"])
+    scr_df = pd.read_csv(args.scraper_csv, parse_dates=["Date"])
 
-    # API events at this venue
-    api_v = api_df[api_df["venue"].str.contains(venue_name, case=False, na=False)].copy()
+    scr_df = scr_df.rename(columns={"Title": "name", "Date": "date", "Time": "time", "Venue": "venue"})
 
-    # Scraper events at this venue
-    scr_v = scr_df[scr_df["venue"].str.contains(venue_name, case=False, na=False)].copy()
+    scraper_venues = [
+        "State Farm Arena",
+        "TD Garden",
+        "Barclays Center",
+        "Spectrum Center",
+        # United Center intentionally skipped (Cloudflare blocking)
+    ]
 
-    lines.append(f"  API events:     {len(api_v)}")
-    lines.append(f"  Scraper events: {len(scr_v)}")
+    lines = []
+    detail_rows = []
 
-    if scr_v.empty:
-        lines.append("  No scraper events — skipping match analysis")
-        continue
+    lines.append("=" * 70)
+    lines.append("VALIDATION REPORT: Ticketmaster API vs. Venue Scrapers")
+    lines.append(f"API events total:     {len(api_df)}")
+    lines.append(f"Scraper events total: {len(scr_df)} ({len(scraper_venues)} venues)")
+    lines.append("=" * 70)
 
-    # Match: for each scraper event, check if any API event is on the same date
-    # with a similar name (fuzzy: at least 4 chars of the name overlap)
-    matched   = []
-    unmatched = []
+    for venue_name in scraper_venues:
+        lines.append(f"\n{'-' * 60}")
+        lines.append(f"Venue: {venue_name}")
+        lines.append(f"{'-' * 60}")
 
-    api_by_date = {}
-    for _, row in api_v.iterrows():
-        d = row["date"].date()
-        api_by_date.setdefault(d, []).append(normalize(row["name"]))
+        api_v = api_df[api_df["venue"].str.contains(venue_name, case=False, na=False)].copy()
+        scr_v = scr_df[scr_df["venue"].str.contains(venue_name, case=False, na=False)].copy()
 
-    for _, srow in scr_v.iterrows():
-        sdate = srow["date"].date()
-        sname = normalize(srow["name"])
+        lines.append(f"  API events:     {len(api_v)}")
+        lines.append(f"  Scraper events: {len(scr_v)}")
 
-        # Check same date ± 1 day (time-zone drift)
-        found = False
-        for delta in [0, 1, -1]:
-            check_date = sdate + timedelta(days=delta)
-            api_names = api_by_date.get(check_date, [])
-            # Simple overlap: first 6 chars match, or either name is substring of the other
-            for aname in api_names:
-                short_s = sname[:6]
-                short_a = aname[:6]
-                if (short_s and short_a and short_s == short_a) or \
-                   (len(sname) > 4 and sname[:8] in aname) or \
-                   (len(aname) > 4 and aname[:8] in sname):
-                    found = True
+        if scr_v.empty:
+            lines.append("  No scraper events, skipping match analysis")
+            continue
+
+        matched = []
+        unmatched = []
+
+        api_by_date = {}
+        for _, row in api_v.iterrows():
+            event_date = row["date"].date()
+            api_by_date.setdefault(event_date, []).append(normalize(row["name"]))
+
+        for _, srow in scr_v.iterrows():
+            sdate = srow["date"].date()
+            sname = normalize(srow["name"])
+
+            found = False
+            for delta in [0, 1, -1]:
+                check_date = sdate + timedelta(days=delta)
+                api_names = api_by_date.get(check_date, [])
+
+                for aname in api_names:
+                    short_s = sname[:6]
+                    short_a = aname[:6]
+                    if (
+                        (short_s and short_a and short_s == short_a)
+                        or (len(sname) > 4 and sname[:8] in aname)
+                        or (len(aname) > 4 and aname[:8] in sname)
+                    ):
+                        found = True
+                        break
+
+                if found:
                     break
+
             if found:
-                break
+                matched.append(srow)
+            else:
+                unmatched.append(srow)
 
-        if found:
-            matched.append(srow)
-        else:
-            unmatched.append(srow)
+            detail_rows.append(
+                {
+                    "venue": venue_name,
+                    "date": srow["date"].date(),
+                    "scraper_name": srow["name"],
+                    "matched_in_api": found,
+                }
+            )
 
-        detail_rows.append({
-            "venue":        venue_name,
-            "date":         srow["date"].date(),
-            "scraper_name": srow["name"],
-            "matched_in_api": found,
-        })
+        pct = len(matched) / len(scr_v) * 100 if scr_v.shape[0] > 0 else 0
+        lines.append(f"  Matched in API: {len(matched)}/{len(scr_v)} ({pct:.0f}%)")
 
-    pct = len(matched) / len(scr_v) * 100 if scr_v.shape[0] > 0 else 0
-    lines.append(f"  Matched in API: {len(matched)}/{len(scr_v)}  ({pct:.0f}%)")
+        if unmatched:
+            lines.append("  Scraper-only events (not found in API):")
+            for row in unmatched:
+                lines.append(f"    {row['date'].date()}  {row['name']}")
 
-    if unmatched:
-        lines.append(f"  Scraper-only events (not found in API):")
-        for row in unmatched:
-            lines.append(f"    {row['date'].date()}  {row['name']}")
+        scr_dates = set(scr_v["date"].dt.date)
+        api_only = api_v[~api_v["date"].dt.date.isin(scr_dates)]
+        if not api_only.empty:
+            lines.append(f"  API-only events on dates not in scraper ({len(api_only)}):")
+            for _, row in api_only.head(10).iterrows():
+                lines.append(f"    {row['date'].date()}  {row['name'][:60]}")
+            if len(api_only) > 10:
+                lines.append(f"    ... and {len(api_only) - 10} more")
 
-    # API-only events (in API but not in scrapers)
-    scr_dates = set(scr_v["date"].dt.date)
-    api_only = api_v[~api_v["date"].dt.date.isin(scr_dates)]
-    if not api_only.empty:
-        lines.append(f"  API-only events on dates not in scraper ({len(api_only)}):")
-        for _, row in api_only.head(10).iterrows():
-            lines.append(f"    {row['date'].date()}  {row['name'][:60]}")
-        if len(api_only) > 10:
-            lines.append(f"    ... and {len(api_only)-10} more")
+    lines.append("\n" + "=" * 70)
+    lines.append("SUMMARY")
+    lines.append("=" * 70)
+    lines.append(f"API total events in playoff window:    {len(api_df)}")
+    lines.append(f"Scraper total events ({len(scraper_venues)} venues):       {len(scr_df)}")
 
-lines.append("\n" + "=" * 70)
-lines.append("SUMMARY")
-lines.append("=" * 70)
-lines.append(f"API total events in playoff window:    {len(api_df)}")
-lines.append(f"Scraper total events (4 venues):       {len(scr_df)}")
+    report_text = "\n".join(lines)
+    print(report_text)
 
-report_text = "\n".join(lines)
-print(report_text)
+    with open(args.report_out, "w", encoding="utf-8") as file:
+        file.write(report_text)
+    print(f"\nSaved {args.report_out}")
 
-with open("validation_report.txt", "w", encoding="utf-8") as f:
-    f.write(report_text)
-print("\nSaved validation_report.txt")
+    if detail_rows:
+        detail_df = pd.DataFrame(detail_rows)
+        detail_df.to_csv(args.detail_out, index=False)
+        print(f"Saved {args.detail_out}")
 
-if detail_rows:
-    detail_df = pd.DataFrame(detail_rows)
-    detail_df.to_csv("validation_detail.csv", index=False)
-    print("Saved validation_detail.csv")
+
+if __name__ == "__main__":
+    main()
