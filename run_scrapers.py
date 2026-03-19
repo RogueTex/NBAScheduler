@@ -8,6 +8,7 @@ Troubleshooting notes (updated after live DOM inspection):
 - United Center: Cloudflare bot-detection blocks all automated access; use Ticketmaster API data
 """
 
+import argparse
 import os, sys, time, re
 import pandas as pd
 from datetime import datetime, timedelta
@@ -22,9 +23,16 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
 from webdriver_manager.chrome import ChromeDriverManager
 
-# ── Date range ────────────────────────────────────────────────────────────────
-start_date = datetime(2026, 4, 14)
-end_date   = datetime(2026, 6, 19)
+def parse_args():
+    parser = argparse.ArgumentParser(description="Run NBA venue scrapers for a playoff window")
+    parser.add_argument("--start-date", default=os.getenv("PLAYOFF_START", "2026-04-14"), help="YYYY-MM-DD")
+    parser.add_argument("--end-date", default=os.getenv("PLAYOFF_END", "2026-06-19"), help="YYYY-MM-DD")
+    parser.add_argument(
+        "--output",
+        default=os.getenv("SCRAPER_EVENTS_OUTPUT", "nba_playoff_scraped_2026.csv"),
+        help="Output CSV path",
+    )
+    return parser.parse_args()
 
 # ── Driver factory ────────────────────────────────────────────────────────────
 def setup_driver():
@@ -420,7 +428,11 @@ SCRAPERS = [
 
 
 def main():
-    print(f"NBA 2026 Playoff Scraper")
+    args = parse_args()
+    start_date = datetime.strptime(args.start_date, "%Y-%m-%d")
+    end_date = datetime.strptime(args.end_date, "%Y-%m-%d")
+
+    print("NBA Playoff Scraper")
     print(f"Window: {start_date.date()} to {end_date.date()}")
     print("="*60)
 
@@ -450,8 +462,8 @@ def main():
         df = (df.drop_duplicates(subset=["Venue", "Title", "Date"])
                 .sort_values(["Date", "Venue"])
                 .reset_index(drop=True))
-        df.to_csv("nba_playoff_scraped_2026.csv", index=False)
-        print(f"\nSaved {len(df)} events to nba_playoff_scraped_2026.csv")
+        df.to_csv(args.output, index=False)
+        print(f"\nSaved {len(df)} events to {args.output}")
         print(df.groupby("Venue").size().to_string())
     else:
         print("\nNo events collected.")
